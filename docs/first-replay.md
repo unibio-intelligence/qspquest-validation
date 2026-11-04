@@ -7,12 +7,9 @@ packages or reference-engine installation are needed for this preset replay.
 
 Run these commands from the validation repository root. If you need to build the
 CLI, follow the [engine installation guide](https://github.com/unibio-intelligence/qspquest/blob/main/docs/installation.md)
-first. This snapshot records QSPQuest 0.1.0 with compiler source hash
-`6896afe45da27cf101e0e68d10019dc387ae8877219d49e61c68b069a561e6b3`.
-The engine suite file pins this exact validation manifest. Build the engine
-revision supplied with that suite to reproduce its source identity; version
-`0.1.0` alone does not identify source bytes. A later engine may also replay the
-fixture, but its result is a new comparison with its own identity.
+first. Results were recorded with QSPQuest 0.1.0 (see
+[environment.json](../environment.json)). Another engine build can replay the
+preset too; treat its result as a new comparison.
 
 ## Set up and verify
 
@@ -31,7 +28,7 @@ test -x "$QSPQUEST_EXECUTABLE"
 
 The executable assignment assumes a sibling checkout named `qspquest`. If yours
 is elsewhere, set `QSPQUEST_EXECUTABLE` to its absolute executable path instead.
-Verification reports 2,841 archived simulation comparisons and 3,812 fitting
+Verification reports 1,719 archived simulation comparisons and 1,906 fitting
 comparisons with consistent recorded QSPQuest identities. The unit tests
 exercise comparison failures as well as successful matches; they do not rerun
 those scientific matrices.
@@ -81,7 +78,3 @@ fitting, population inference or a complete source-paper reproduction.
 
 [Methods](../METHODS.md#optional-rerun-instructions) documents the optional R,
 Julia and other independent-reference workflows and their recorded dependencies.
-
-Replay inputs use the declared `qspquest.*` formats. The runner verifies archive
-and member hashes before execution and records identical source and executed
-input hashes in its `*-inputs.json` receipts. Unsupported formats are rejected.

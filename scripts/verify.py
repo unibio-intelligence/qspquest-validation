@@ -81,7 +81,7 @@ def main():
     )
     for m in selected["models"]:
         for c in m["cases"]:
-            check(len(c["solvers"]) == 2, "missing native solver")
+            check([s["solver"] for s in c["solvers"]] == ["diffsol_bdf"], "native solver differs")
             for s in c["solvers"]:
                 check(s["status"] == "match", "OMEX mismatch")
                 check(
@@ -93,6 +93,7 @@ def main():
         check(len(j["cases"]) == 47, "independent-engine denominator differs")
         for c in j["cases"]:
             check(c["status"] == "matched", "independent-engine mismatch")
+            check(list(c["comparisons"]) == ["diffsol_bdf"], "native solver differs")
             for r in c["comparisons"].values():
                 check(
                     r["native_engine_identity"]["compiler_source_sha256"] == expected,
@@ -100,9 +101,7 @@ def main():
                 )
     for lane in [
         "conditions-bdf",
-        "conditions-rodas5p",
         "conditions-patched-rxode2-bdf",
-        "conditions-patched-rxode2-rodas5p",
     ]:
         j = report("nlmixr2-" + lane + ".json.gz")
         cases = [c for m in j["models"] for c in m["cases"]]
@@ -141,7 +140,8 @@ def main():
     check(
         fit["contracts"] == 1906
         and len(fit["datasets"]) == 21
-        and len(fit["rows"]) == 3812,
+        and len(fit["rows"]) == 1906
+        and {r["solver"] for r in fit["rows"]} == {"diffsol_bdf"},
         "fitting denominator differs",
     )
     check(fit["compiler_source_sha256"] == expected, "old fitting engine")
@@ -153,14 +153,14 @@ def main():
         ),
         "fitting result differs",
     )
-    for filename, count in [("simulations.csv", 2841), ("fitting.csv", 3812)]:
+    for filename, count in [("simulations.csv", 1719), ("fitting.csv", 1906)]:
         with (ROOT / "results" / filename).open() as f:
             rows = list(csv.DictReader(f))
         check(len(rows) == count, "CSV count differs: " + filename)
     for p in (ROOT / "scripts").glob("*.py"):
         ast.parse(p.read_text())
     print(
-        "Verified all file and OMEX member hashes; 2,841 simulation comparisons and 3,812 fitting comparisons; recorded QSPQuest engine identities consistent."
+        "Verified all file and OMEX member hashes; 1,719 simulation comparisons and 1,906 fitting comparisons; recorded QSPQuest engine identities consistent."
     )
 
 

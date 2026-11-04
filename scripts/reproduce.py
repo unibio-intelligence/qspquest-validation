@@ -88,7 +88,7 @@ def selected(workspace, cli, model_filter, case_filter):
             folder.mkdir(parents=True, exist_ok=True)
             model = folder / "model.json"
             model.write_bytes(members[native["model"]])
-            for solver in ["diffsol_bdf", "diffsol_rodas5p"]:
+            for solver in ["diffsol_bdf"]:
                 run_native(
                     cli,
                     "run",
@@ -122,7 +122,7 @@ def compare_reference_folder(workspace, reference):
             from trajectory_comparison import projection_aliases
             d["native_aliases"] = projection_aliases(index)
             tests = {}
-            for solver in ["diffsol_bdf", "diffsol_rodas5p"]:
+            for solver in ["diffsol_bdf"]:
                 native = json.loads(
                     (
                         workspace
@@ -169,7 +169,7 @@ def fit(workspace, cli, dataset_filter, subject_filter, rscript):
     for case in plan["cases"]:
         folder = root / case["dataset"] / str(case["subject"])
         case["directory"] = str(folder.resolve())
-        for solver in ["diffsol_bdf", "diffsol_rodas5p"]:
+        for solver in ["diffsol_bdf"]:
             request = folder / (solver + "-request.json")
             result = run_native(
                 cli,
@@ -224,9 +224,7 @@ def main():
             "copasi",
             "amici",
             "nlmixr2-bdf",
-            "nlmixr2-rodas5p",
             "nlmixr2-patched-bdf",
-            "nlmixr2-patched-rodas5p",
             "presets",
             "fitting",
         ],
@@ -257,9 +255,7 @@ def main():
         unpack("nlmixr2-simulations.omex", workspace)
         lane = {
             "nlmixr2-bdf": "conditions-bdf",
-            "nlmixr2-rodas5p": "conditions-rodas5p",
             "nlmixr2-patched-bdf": "conditions-patched-rxode2-bdf",
-            "nlmixr2-patched-rodas5p": "conditions-patched-rxode2-rodas5p",
         }[a.suite]
         if "patched" in a.suite:
             subprocess.run(

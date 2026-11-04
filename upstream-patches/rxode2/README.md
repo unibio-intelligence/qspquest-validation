@@ -1,8 +1,7 @@
 # rxode2 administered-amount history patch
 
-UniBio Intelligence correction to administered-amount history.
-The exact 5.1.8 source commit is
-`2f421fb1341a2b8954a7f86cf6aceb3938a28bef`.
+A UniBio Intelligence fix for administered-amount history in rxode2 5.1.8,
+source commit `2f421fb1341a2b8954a7f86cf6aceb3938a28bef`.
 
 `handleTlastInline` reconstructs the raw administered amount for a fixed
 infusion. Two later handlers overwrite it with the internal rate. Removing
@@ -27,6 +26,6 @@ R_LIBS_USER="$PWD/patched-R-library" Rscript \
   upstream-patches/rxode2/validate_administered_history.R history-replay
 ```
 
-Install the package's declared R dependencies first. Retain the normal R
-libraries after the patched directory when configuring `R_LIBS_USER`.
-`original/` and `patched/` retain the analytic regression summary receipts. The script regenerates their trajectories. The full current-engine 420-condition results are reported separately in results/.
+Install rxode2's R dependencies first. In `R_LIBS_USER`, list the patched
+directory first, followed by your normal R libraries.
+`original/` and `patched/` hold summaries of the analytic tests; the script regenerates their trajectories. The full 420-condition results are in results/.

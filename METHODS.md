@@ -1,61 +1,64 @@
 # Test methods
 
-The validation report is organized around simulation accuracy, parameter
-estimation accuracy, and failure handling and domain limits. This document
-explains the tested problems and acceptance criteria. Reference tools and
-execution details support those assessments.
+This document describes what was tested and the pass criteria, in three parts:
+simulation accuracy, parameter estimation accuracy, and failure handling and
+domain limits.
 
 ## Simulation accuracy
 
 ### States, outputs and solver coverage
 
-For the eight OMEX models, reference adapters read SBML mathematical ASTs and
-SED-ML sampling directly. All declared states and outputs must satisfy
-`abs(native - reference) <= 1e-8 + 1e-4*abs(reference)` at matching observation
-times. There is no trajectory interpolation. Scheduled simultaneous assignments
-are segmented to preserve initial post-event and later pre-event samples.
-`omex-simulations.omex` contains the eight original model archives and all 94
-exact native requests, including solver-specific absolute tolerance declarations.
+For the eight OMEX models, the reference adapters read the SBML equations and
+SED-ML sampling times directly. Every state and output must satisfy
+`abs(native - reference) <= 1e-8 + 1e-4*abs(reference)` at the same observation
+times, with no interpolation. Simultaneous scheduled assignments are split into
+segments so that both the initial post-event sample and later pre-event samples
+are compared. `omex-simulations.omex` contains the eight original model archives
+and their 94 native requests. QSPQuest runs the 47 BDF requests with their stored
+tolerances and callback budgets. The 47 Rodas5P requests are kept from earlier
+engine builds and are not run: the current engine uses upstream Diffsol, which
+has no Rodas5P.
+Each reference adapter's settings are in the scripts and per-case reports.
+Normalizing the SBML time symbol changes notation only. AMICI uses Adams with
+fixed-point iteration for the Yuan cases whose fractional power has a singular
+analytic Jacobian at zero, and BDF/Newton for the other cases.
 
-Native simulations use BDF and Rodas5P with their archived relative tolerances
-and callback budgets. Rodas5P uses explicit state absolute tolerance 1e-14.
-Independent adapter policies are visible in the scripts and per-case reports.
-SBML time-symbol normalization changes notation only. AMICI uses its declared
-Adams/fixed-point route for the Yuan cases whose fractional power has a singular
-analytic Jacobian at zero; other ordinary cases use BDF/Newton.
-
-The 597 additional fixed presets use the same numerical comparison limit and
-exact time grids. `source-presets.omex` retains the exact native JSON models and
-requests and a single independent reference CSV per preset. This suite replays
-QSPQuest against those pinned scientific-source oracles; it does not regenerate
-the original source validators. Their oracle/model/request hashes are retained
-in `results/source-presets.json.gz`. Source-specific scope and attribution are
-in `inputs/model-sources.json`; omitted or held source presets are outside the
-597 denominator. This is deterministic evidence, not fitting or full-paper
+The 597 additional fixed presets use the same tolerance and exact time grids.
+`source-presets.omex` holds each preset's native JSON model and request and one
+independent reference CSV. QSPQuest is rerun against these stored references; the
+original tools that produced them are not rerun. Their hashes are in
+`results/source-presets.json.gz`, and source scope and attribution are in
+`inputs/model-sources.json`. Presets that were left out or held back are not
+counted in the 597. This tests simulation only, not fitting or full-paper
 reproduction.
+
+Most presets run with BDF; 11 use TSIT45. The 28 presets from seven models that
+earlier builds ran with Rodas5P now use BDF with the 1,000x or 10,000x tighter
+local tolerances chosen for the model library. Their models, grids, doses and
+budgets are unchanged, and they are compared with the same references and limits.
 
 ### Upstream model and condition coverage
 
-The 59 R definitions are pinned from nlmixr2lib 0.3.2. Every declared request is
-retained: 420 conditions per native solver, with typical individual effects
-(eta=0), fixed parameters, and explicit dose events. Source-to-native symbol
-mappings are included. Comparisons require finite values and the exact time grid,
-using `abs(delta) <= 1e-7 + 1e-6*abs(reference)` for every compared output.
-The native output includes the mapped source states. The original-reference
-lane enables rxode2's safeZero/safeLog/safePow policies; guarded finite outputs
-are not treated as a solution of an undefined unguarded expression.
+The 59 R models come from nlmixr2lib 0.3.2. All 420 conditions are run with BDF,
+using typical individual effects (eta=0), fixed parameters and
+explicit dose events. Source-to-native symbol mappings are included. Comparisons
+require finite values on the exact time grid, with
+`abs(delta) <= 1e-7 + 1e-6*abs(reference)` for every compared output, including
+the mapped source states. The original reference runs enable rxode2's
+safeZero/safeLog/safePow guards; a finite value produced by a guard is not
+counted as a solution of an undefined expression.
 
-Counts distinguish 402 unchanged-reference matches, one additional
-explicit-administered-amount reference match, one original infusion-history
-discrepancy, and 16 rejections per native solver. Changing the reference is not
-counted as an unchanged-reference pass.
+With BDF, the results are 402 matches against the unchanged reference,
+one more match using an explicit administered-amount reference, one
+infusion-history discrepancy with the original reference, and 16 rejections. The
+match that needed a changed reference is not counted as an unchanged-reference
+pass.
 
-The corrected-reference comparison used the pinned rxode2 source with an
-explicit infusion-history patch. Each matrix had 404 valid matches and 16
-rejections. Both R and native executions were fresh for the current recorded
-engine. The correction changes reference infusion-history handling, without
-altering native equations or request parameters. Original and corrected results
-remain separate.
+A second comparison used rxode2 rebuilt from the pinned source with an
+infusion-history patch. BDF had 404 valid matches and 16 rejections. Both
+R and QSPQuest were rerun for the recorded engine. The patch changes only how the
+reference handles infusion history; native equations and request parameters are
+unchanged. Original and corrected results are reported separately.
 
 ### Dosing and event behavior
 
@@ -63,32 +66,30 @@ Scheduled assignments and dose events are assessed at their declared sample
 positions, including initial post-event and later pre-event observations. The
 upstream infusion-history discrepancy is documented in `UPSTREAM_ISSUES.md`.
 
-Nine analytic regressions assessed reference administered-dose history across
+Nine analytic test cases checked the reference's administered-dose history across
 bolus, duration/rate infusions, bioavailability, unequal repeat and overlapping
-doses, compartments, subjects, and a no-dose zero-history policy. The acceptance
-limit was absolute error <= `1e-7`. Unmodified rxode2 failed seven of nine cases;
-the patched reference passed all nine, with maximum absolute error below
-`2e-13`. These are checks of the reference correction. They complement the
-separate native-versus-reference simulation comparisons and do not independently
-qualify QSPQuest dosing behavior.
+doses, compartments, subjects, and a no-dose zero-history policy. The pass limit
+was absolute error <= `1e-7`. Unmodified rxode2 failed seven of nine cases; the
+patched reference passed all nine, with maximum absolute error below `2e-13`.
+These cases test the reference patch, not QSPQuest's dosing behavior directly.
 
 ## Parameter estimation accuracy
 
-`individual-fitting.omex` retains every final qsp definition, observation row,
+`individual-fitting.omex` contains every final qsp definition, observation row,
 dose event, parameter role, physical bound, known error SD, reference equation,
-and native fitting request. It is a native fitting profile in a COMBINE
-container; no generic SED-ML estimation task is claimed. Observation/data source
-hashes and the original GPL contributor records are included.
+and native fitting request; only the BDF requests are run. It uses a COMBINE container with a native fitting
+format, not a SED-ML estimation task. Data source hashes and the original GPL
+contributor records are included.
 
-There are 1,906 contracts from 21 datasets, each executed with BDF and Rodas5P.
+There are 1,906 contracts from 21 datasets, each executed with BDF.
 The objectives are fully normalized individual Gaussian likelihoods with no
 estimated random effects. Known additive SD is 20% of maximum subject response.
 The twelve ACOP examples estimate clearance or Vmax; theophylline estimates
 clearance, volume and absorption rate; phenobarbital estimates clearance and
 volume. Other contracts estimate the declared single response, weight, PK,
 myelosuppression, PBPK, or binding parameter. Warfarin is PK-only. Neonatal
-weights are simulated. These narrow contracts do not reproduce source population
-analyses or qualify source-model fitting for all 59 nlmixr2lib entries.
+weights are simulated. These narrow contracts do not reproduce the source
+population analyses or cover fitting for all 59 nlmixr2lib models.
 
 A match requires all three:
 
@@ -96,45 +97,44 @@ A match requires all three:
 - Absolute normalized Gaussian negative-log-likelihood difference <= `1e-4`.
 - Every fitted prediction difference <= `1e-6 + 0.001*abs(reference)`.
 
-The native fit must also report convergence. The R route invokes actual
-nlmixr2est estimation via FOCEI; scalar cases without random effects dispatch
-to scalar optimization. Method-specific OFV values are not equated to normalized
-NLL. WBC, PBPK and binding references use a positive log-multiplier within the
-same physical bounds. Archived final WBC requests use the independently chosen
-best converged fit from source start, seven log-spaced starts, and a physical
-midpoint; no reference estimate supplies the native start. Replaying the final requests tests the recorded fitting contract.
+The native fit must also converge. The R reference runs nlmixr2est estimation
+via FOCEI; scalar cases without random effects use scalar optimization. OFV values from
+different methods are not compared with normalized NLL. WBC, PBPK and binding
+references use a positive log-multiplier within the same physical bounds. The
+stored final WBC requests use the best converged fit among runs from the source
+start, seven log-spaced starts and a physical midpoint; the reference estimate is
+never used as a native start. Replaying the final requests tests these recorded
+contracts.
 
-Data exclusions remain explicit in each contract: the initial cohort excludes
+Each contract states its data exclusions: the initial cohort excludes
 time-zero observations and linear ACOP rows at/after the time-216 reset;
 phenobarbital and WBC exclude too-sparse subjects. WBC legacy infusion start/stop
 rows are paired into amount/rate events. The neonatal contracts retain time zero.
 
-All 3,812 native fits converged and matched the three criteria above.
+All 1,906 native fits converged and matched the three criteria above.
 Five datasets and their concrete limits are listed in
 `REMAINING_FITTING_CONTRACTS.md`. Population fitting equivalence is outside this report.
 
 ## Failure handling and domain limits
 
-The original requests and parameters were retained when assessing undefined
-expressions, missing dose history, poles and finite-time blow-up. Each native
-solver rejected the same 16 conditions in the original and corrected reference
-matrices. `NEGATIVE_CONDITIONS.md` lists the native domain/solver diagnostics and
+Undefined expressions, missing dose history, poles and finite-time blow-up were
+tested with the original requests and parameters unchanged. BDF
+rejected the same 16 conditions in both the original and corrected comparisons. `NEGATIVE_CONDITIONS.md` lists the native domain/solver diagnostics and
 actual R outcomes; `UPSTREAM_ISSUES.md` provides the algebra and history analysis.
 
-Reference outcomes are evaluated for mathematical validity, rather than process
-exit status alone. The original reference enables safeZero, safeLog and safePow;
-finite values from these guards do not establish a solution of an undefined
-unguarded expression. Nonfinite/missing outputs and solver failures are recorded
-explicitly. Rejected requests remain outside the successful-simulation count.
-These checks cover the recorded negative conditions; they do not cover all
-possible invalid inputs.
+Reference results are judged on mathematical validity, not just a successful
+exit. Finite values produced by the safeZero, safeLog and safePow guards are not
+counted as solutions of an undefined expression. Non-finite or missing outputs and
+solver failures are recorded. Rejected requests are not counted as successful
+simulations. These checks cover the listed negative conditions, not every
+possible invalid input.
 
 ## Reference methods and environments
 
-`environment.json` records the exported QSPQuest compiler source hash, executable
-hash, DiffSol backend hash, and reference versions. Replays record the
-binary hash actually used; a different platform binary will differ even when
-built from the same source. The reported evidence applies to the recorded engine build.
+`environment.json` records the QSPQuest compiler source, executable and DiffSol
+backend hashes, and the reference tool versions. Replays record the hash of the
+binary actually used; a binary for another platform has a different hash even when
+built from the same source. The results apply to the recorded engine build.
 
 Python needs NumPy, pandas, and python-libsbml. R references use rxode2 5.1.8,
 nlmixr2lib 0.3.2, nlmixr2est 7.1.0, jsonlite, digest, and nlme. Configure
@@ -150,17 +150,16 @@ Rodas5P. BDF and LSODA are different algorithms.
 `results/summary.json` gives aggregate counts; CSV files give one row per
 comparison; `.json.gz` files preserve full per-case metrics and identities.
 Read a detailed report with Python's `gzip.open` and `json.load`. `manifest.json`
-checksums this minimal snapshot. `scripts/verify.py` checks all checksums,
+lists a checksum for every file. `scripts/verify.py` checks all checksums,
 COMBINE manifests, fixture-member hashes, result counts, and engine identities.
-The inputs are test fixtures, not another public model catalog. Replays create
-raw predictions, trajectories and logs only in the requested new directory.
+The inputs are test fixtures, not a model catalog. Replays write predictions,
+trajectories and logs only to the new output directory you choose.
 
 ## Optional rerun instructions
 
 For a complete dependency-free setup and one selected comparison, start with
 [First replay](docs/first-replay.md). The commands below run optional reference
 engines or additional recorded tests.
-The validation findings and scope are reported above and in `README.md`.
 Install the dependencies listed under reference methods and environments, then
 set `QSPQUEST_EXECUTABLE` to the QSPQuest CLI.
 
@@ -180,12 +179,12 @@ python scripts/reproduce.py --suite mrgsolve \
   --cli "$QSPQUEST_EXECUTABLE" --output replay-mrgsolve
 ```
 
-The runner freshly executes both native solvers before generating and comparing
-the reference. Omit `--model` for all eight models. Additional source presets
+The runner reruns BDF, then generates the reference and compares
+them. Omit `--model` for all eight models. Additional source presets
 use `--suite presets`; this compares new native trajectories against the retained
 source references without regenerating the original source validators.
 
-For upstream conditions, use `--suite nlmixr2-bdf` or `nlmixr2-rodas5p`:
+For upstream conditions, use `--suite nlmixr2-bdf`:
 
 ```sh
 python scripts/reproduce.py --suite nlmixr2-bdf \
@@ -195,8 +194,7 @@ python scripts/reproduce.py --suite nlmixr2-bdf \
 
 Omit `--model` and `--case` for the complete matrix. For the corrected-reference
 comparison, follow `upstream-patches/rxode2/README.md`, put the patched library
-first in `R_LIBS_USER`, and use `nlmixr2-patched-bdf` or
-`nlmixr2-patched-rodas5p`. The runner checks the analytic dose-history regressions
+first in `R_LIBS_USER`, and use `nlmixr2-patched-bdf`. The runner checks the analytic dose-history regressions
 before the matrix comparison.
 
 For fitting, `--model` selects the dataset and `--case` selects the subject:
@@ -207,13 +205,12 @@ python scripts/reproduce.py --suite fitting \
   --cli "$QSPQUEST_EXECUTABLE" --output replay-fit
 ```
 
-Omit both selectors for all 3,812 fits. Reruns write new trajectories, optimizer
+Omit both selectors for all 1,906 fits. Reruns write new trajectories, optimizer
 output and logs to the chosen output directory.
 
 ## Engine and reference identities
 
-`environment.json` identifies the QSPQuest build used for the native executions.
-Each comparison records the input hashes and actual native execution identity.
-Independent reference trajectories retain their original bytes and reference
-engine versions; their reuse is recorded explicitly. A comparison against a
-retained reference is not a new execution of that reference engine.
+`environment.json` identifies the QSPQuest build used for the native runs. Each
+comparison records its input hashes and the QSPQuest binary actually run. Stored
+reference trajectories are kept unchanged with their engine versions; a
+comparison against a stored reference does not rerun that reference engine.

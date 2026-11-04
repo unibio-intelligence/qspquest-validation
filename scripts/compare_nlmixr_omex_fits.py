@@ -20,7 +20,7 @@ def compare(root, cli_sha256=None):
             if reference_path.exists()
             else {"status": "missing"}
         )
-        for solver in ["diffsol_bdf", "diffsol_rodas5p"]:
+        for solver in ["diffsol_bdf"]:
             row = {
                 "dataset": case["dataset"],
                 "subject": case["subject"],
@@ -135,7 +135,7 @@ def compare(root, cli_sha256=None):
                         if r["dataset"] == n and r["solver"] == s
                     )
                 )
-                for s in ["diffsol_bdf", "diffsol_rodas5p"]
+                for s in ["diffsol_bdf"]
             }
             for n in sorted({c["dataset"] for c in plan["cases"]})
         },

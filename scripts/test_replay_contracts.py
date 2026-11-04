@@ -151,7 +151,7 @@ class FittingContractTests(unittest.TestCase):
         (folder/"nlmixr2-result.json").write_text(json.dumps(reference))
         run={"regimen":{"observations":[{"time":{"value":t,"unit":"h"},"side":s}
              for t,s in [(0.,"post"),(1.,"pre")]]}}
-        for solver in ("diffsol_bdf","diffsol_rodas5p"):
+        for solver in ("diffsol_bdf",):
             (folder/(solver+"-request.json")).write_text(json.dumps({"problem":{"request":{
                 "bounds":[{"parameter":"cl","lower":{"value":.1,"unit":"1/h"},"upper":{"value":10.,"unit":"1/h"}}],
                 "objective":{"simulation":{"run":run}}}}}))
@@ -165,7 +165,7 @@ class FittingContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);folder=self.make_case(root)
             with contextlib.redirect_stdout(io.StringIO()): result=compare_fits(root,cli_sha256="actual")
-            self.assertEqual(result["counts"],{"matched_converged":2})
+            self.assertEqual(result["counts"],{"matched_converged":1})
             self.assertEqual(result["cli_sha256"],"actual")
             p=folder/"diffsol_bdf-prediction.json";original=json.loads(p.read_text())
             for times in ([100.,101.], [], [0.], [0.,float("nan")], [False,1.]):
@@ -220,14 +220,14 @@ for case in plan["cases"]:
   for obs in request["regimen"]["observations"]:writer.writerow([obs["time"]["value"],0.,0.,0.])
 ''')
             cli.chmod(0o755);rscript.chmod(0o755)
-            for i,suite in enumerate(("nlmixr2-bdf","nlmixr2-rodas5p","nlmixr2-patched-bdf","nlmixr2-patched-rodas5p","nlmixr2-bdf")):
+            for i,suite in enumerate(("nlmixr2-bdf","nlmixr2-patched-bdf","nlmixr2-bdf")):
                 out=root/str(i);env=dict(os.environ)
-                if i==4:env["VALIDATION_TEST_SHORT"]="1"
+                if i==2:env["VALIDATION_TEST_SHORT"]="1"
                 command=[sys.executable,"-B",str(base/"scripts/reproduce.py"),"--suite",suite,"--model","PK_1cmt",
                          "--case","no_dose","--cli",str(cli),"--rscript",str(rscript),"--output",str(out)]
                 run=subprocess.run(command,capture_output=True,text=True,env=env)
-                with self.subTest(suite=suite,short=i==4):
-                    if i==4:
+                with self.subTest(suite=suite,short=i==2):
+                    if i==2:
                         self.assertNotEqual(run.returncode,0)
                         self.assertIn("failed",(out/"results/summary.json").read_text())
                     else:

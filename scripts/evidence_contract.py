@@ -5,8 +5,7 @@ import json
 
 REPORTS = ('omex-rxode2', 'mrgsolve', 'ordinarydiffeq', 'roadrunner', 'copasi',
            'amici', 'source-presets', 'nlmixr2-conditions-bdf',
-           'nlmixr2-conditions-rodas5p', 'nlmixr2-conditions-patched-rxode2-bdf',
-           'nlmixr2-conditions-patched-rxode2-rodas5p', 'individual-fitting')
+           'nlmixr2-conditions-patched-rxode2-bdf', 'individual-fitting')
 
 
 def max_error(comparison):
@@ -33,12 +32,11 @@ def simulation_rows(reports):
                     comparison['status'], comparison)
     for case in reports['source-presets']['cases']:
         add('source-presets', case['model_id'], case['scenario_id'],
-            'diffsol_bdf', case['status'], case)
-    for name in REPORTS[7:11]:
+            'diffsol_' + case['engine_identity']['algorithm'], case['status'], case)
+    for name in REPORTS[7:9]:
         for model in reports[name]['models']:
             for case in model['cases']:
-                solver = 'diffsol_rodas5p' if name.endswith('rodas5p') else 'diffsol_bdf'
-                add(name, model['model_id'], case['condition_id'], solver,
+                add(name, model['model_id'], case['condition_id'], 'diffsol_bdf',
                     case['status'], case)
     return rows
 

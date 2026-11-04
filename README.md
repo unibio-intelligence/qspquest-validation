@@ -4,14 +4,15 @@ Numerical comparisons for [QSPQuest](https://github.com/unibio-intelligence/qspq
 what was tested, what matched, and where the results apply. These results describe
 the engine build identified in [environment.json](environment.json); they do not
 qualify later releases. A match means agreement within stated tolerances.
+QSPQuest now uses upstream Diffsol, which has no Rodas5P; native results that
+used Rodas5P in earlier builds are now recorded with BDF.
 
 | Test | Coverage | Result |
 | --- | --- | --- |
-| OMEX simulations | 8 models, 47 scenarios, BDF and Rodas5P; six reference engines | All 47 scenarios matched for each reference and native solver |
+| OMEX simulations | 8 models, 47 scenarios, BDF; six reference engines | All 47 scenarios matched each reference |
 | Additional source presets | 597 fixed presets | All matched their retained reference trajectories |
-| Upstream conditions | 59 model definitions, 420 conditions per solver | 402 unchanged-reference matches, one explicit-history match, one discrepancy and 16 rejections |
-| Corrected-reference conditions | Same conditions with a documented rxode2 infusion-history correction | All 404 valid conditions matched per solver; 16 remained rejected |
-| Individual fitting | 1,906 contracts from 21 datasets, run with both native solvers | All 3,812 fits converged and matched parameters, likelihoods and predictions |
+| Upstream conditions | 59 model definitions, 420 conditions | 402 matched unmodified rxode2; 1 matched an explicit dose history; 1 rxode2 infusion discrepancy matched after a documented fix; 16 rejected (see below) |
+| Individual fitting | 1,906 contracts from 21 datasets, run with BDF | All 1,906 fits converged and matched parameters, likelihoods and predictions |
 
 These cohorts overlap; their counts are not additive. Agreement supports the
 tested equations, inputs and domains. It does not establish biological validity,
@@ -41,7 +42,7 @@ negative-log-likelihood difference of at most `1e-4`.
 [Five datasets remain outside the fitting claim](REMAINING_FITTING_CONTRACTS.md).
 Population fitting is outside this comparison set.
 
-The 16 rejected conditions per solver cover undefined expressions, absent dose
+The 16 rejected conditions cover undefined expressions, absent dose
 history and trajectories without a valid finite solution. They are negative
 outcomes, not simulation successes. See the
 [condition-by-condition diagnostics](NEGATIVE_CONDITIONS.md).

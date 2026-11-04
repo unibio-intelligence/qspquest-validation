@@ -2,20 +2,19 @@
   "schema": "qspquest.validation.summary/v3",
   "engine": {
     "backend": "diffsol",
-    "backend_version": "0.18.0+sha256:36eb02e7fab3d73ba5d9bd123c99341cec9fa1aa4b15b6310e5fe9cfbdedac67",
-    "compiler_source_sha256": "sha256:6896afe45da27cf101e0e68d10019dc387ae8877219d49e61c68b069a561e6b3",
+    "backend_version": "0.18.0+git:883d9a09238c2e0b465f0f1549c462b8c38ea1b2",
+    "compiler_source_sha256": "sha256:61847e895ae1d0b16091b1428a20b8443aeef118c1ec1ae00322fd0ab0136202",
     "compiler_version": "qspquest/0.1.0",
     "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (Homebrew)",
     "target": "aarch64-apple-darwin"
   },
-  "cli_sha256": "7379da8a20c0b9438e56613a24d60888bc1e6e2b9b29d653b5124c1b3a5d6a59",
+  "cli_sha256": "6c4e2bfe01f75c60cc3bc33145263e11a5272ba73700eb91c5914e01b2faeb5e",
   "reference_execution": "Retained reference trajectories and fit estimates; native executions are fresh. Reference versions identify the retained records, not newly run reference processes.",
   "simulation_results": {
     "omex_models": 8,
     "omex_scenarios_per_solver": 47,
     "omex_rxode2_matches": {
-      "bdf": 47,
-      "rodas5p": 47
+      "bdf": 47
     },
     "additional_source_presets": 597,
     "additional_source_matches": 597,
@@ -26,8 +25,7 @@
         "scenarios": 47,
         "matched": 47,
         "native_solvers": [
-          "diffsol_bdf",
-          "diffsol_rodas5p"
+          "diffsol_bdf"
         ]
       },
       {
@@ -36,8 +34,7 @@
         "scenarios": 47,
         "matched": 47,
         "native_solvers": [
-          "diffsol_bdf",
-          "diffsol_rodas5p"
+          "diffsol_bdf"
         ]
       },
       {
@@ -46,8 +43,7 @@
         "scenarios": 47,
         "matched": 47,
         "native_solvers": [
-          "diffsol_bdf",
-          "diffsol_rodas5p"
+          "diffsol_bdf"
         ]
       },
       {
@@ -56,8 +52,7 @@
         "scenarios": 47,
         "matched": 47,
         "native_solvers": [
-          "diffsol_bdf",
-          "diffsol_rodas5p"
+          "diffsol_bdf"
         ]
       },
       {
@@ -66,8 +61,7 @@
         "scenarios": 47,
         "matched": 47,
         "native_solvers": [
-          "diffsol_bdf",
-          "diffsol_rodas5p"
+          "diffsol_bdf"
         ]
       }
     ],
@@ -79,16 +73,7 @@
         "mismatch": 1,
         "expected_rejection": 16
       },
-      "nlmixr2-conditions-rodas5p": {
-        "match": 403,
-        "mismatch": 1,
-        "expected_rejection": 16
-      },
       "nlmixr2-conditions-patched-rxode2-bdf": {
-        "match": 404,
-        "expected_rejection": 16
-      },
-      "nlmixr2-conditions-patched-rxode2-rodas5p": {
         "match": 404,
         "expected_rejection": 16
       }
@@ -96,7 +81,7 @@
   },
   "fitting_results": {
     "contracts": 1906,
-    "solver_runs": 3812,
+    "solver_runs": 1906,
     "datasets": [
       "Bolus_1CPT",
       "Bolus_1CPTMM",
@@ -121,174 +106,111 @@
       "wbcSim"
     ],
     "counts": {
-      "matched_converged": 3812
+      "matched_converged": 1906
     },
     "by_dataset": {
       "Bolus_1CPT": {
         "diffsol_bdf": {
-          "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 120
         }
       },
       "Bolus_1CPTMM": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "Bolus_2CPT": {
         "diffsol_bdf": {
-          "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 120
         }
       },
       "Bolus_2CPTMM": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "Infusion_1CPT": {
         "diffsol_bdf": {
-          "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 120
         }
       },
       "Infusion_1CPTMM": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "Infusion_2CPT": {
         "diffsol_bdf": {
-          "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 120
         }
       },
       "Infusion_2CPTMM": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "Oral_1CPT": {
         "diffsol_bdf": {
-          "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 120
         }
       },
       "Oral_1CPTMM": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "Oral_2CPT": {
         "diffsol_bdf": {
-          "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 120
         }
       },
       "Oral_2CPTMM": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "Wang2007": {
         "diffsol_bdf": {
-          "matched_converged": 10
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 10
         }
       },
       "mavoglurant": {
         "diffsol_bdf": {
           "matched_converged": 120
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 120
         }
       },
       "neonatal_wt": {
         "diffsol_bdf": {
-          "matched_converged": 189
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 189
         }
       },
       "nimoData": {
         "diffsol_bdf": {
           "matched_converged": 12
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 12
         }
       },
       "pheno_sd": {
         "diffsol_bdf": {
-          "matched_converged": 35
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 35
         }
       },
       "theo_md": {
         "diffsol_bdf": {
           "matched_converged": 12
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 12
         }
       },
       "theo_sd": {
         "diffsol_bdf": {
-          "matched_converged": 12
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 12
         }
       },
       "warfarin": {
         "diffsol_bdf": {
           "matched_converged": 32
-        },
-        "diffsol_rodas5p": {
-          "matched_converged": 32
         }
       },
       "wbcSim": {
         "diffsol_bdf": {
-          "matched_converged": 44
-        },
-        "diffsol_rodas5p": {
           "matched_converged": 44
         }
       }

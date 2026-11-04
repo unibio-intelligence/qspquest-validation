@@ -188,7 +188,7 @@ def main():
                     json.dumps(provenance, indent=2) + "\n"
                 )
                 tests = {}
-                for method in ["diffsol_bdf", "diffsol_rodas5p"]:
+                for method in ["diffsol_bdf"]:
                     path = (
                         a.validation
                         / "selected-model-simulations"

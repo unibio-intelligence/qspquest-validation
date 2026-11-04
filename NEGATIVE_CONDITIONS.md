@@ -1,8 +1,8 @@
 # Negative conditions
 
-All 16 rejected requests are retained, with the actual independent R outcome.
-A process exit of zero does not certify finite model outputs. rxode2 safeZero,
-safeLog and safePow were enabled for this source cohort and are recorded per run.
+This table lists all 16 rejected requests with the independent R result for each.
+A successful R exit does not mean the outputs are finite. rxode2's safeZero,
+safeLog and safePow guards were enabled and are recorded for each run.
 
 | Source model | Condition | QSPQuest diagnostic | R result |
 | --- | --- | --- | --- |
@@ -23,8 +23,8 @@ safeLog and safePow were enabled for this source cohort and are recorded per run
 | tgi_no_sat_powerLaw | retained_nlmixr-v032-numeric-pilot-v5 | solver | finite guarded outputs |
 | tgi_sat_genVonBertalanffy | retained_nlmixr-v032-numeric-pilot-v5 | solver | contains nonfinite/missing outputs |
 
-Finite-time blow-up may produce enormous finite guarded output in R; consult
-the source-domain analysis in `UPSTREAM_ISSUES.md`. Domain rejections are not
-numerical mismatches or passing simulations. Parameters and events are preserved.
+Where the solution blows up in finite time, R may return an enormous but finite
+guarded value; see `UPSTREAM_ISSUES.md`. Domain rejections are neither numerical
+mismatches nor passing simulations. Parameters and dose events were not changed.
 
-The separately corrected observation/history/window contracts and synthetic positive-potency variants remain private supplemental evidence. They are not added to the unchanged-source match count.
+Corrected or synthetic variants of these conditions are not included here and are not counted as matches.
