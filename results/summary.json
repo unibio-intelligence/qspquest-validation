@@ -3,12 +3,12 @@
   "engine": {
     "backend": "diffsol",
     "backend_version": "0.18.0+git:883d9a09238c2e0b465f0f1549c462b8c38ea1b2",
-    "compiler_source_sha256": "sha256:61847e895ae1d0b16091b1428a20b8443aeef118c1ec1ae00322fd0ab0136202",
+    "compiler_source_sha256": "sha256:505ca29f3cd0a1321ca7941b0d712fcf0bcf86de2bcfe6ead767b421550fd6d2",
     "compiler_version": "qspquest/0.1.0",
     "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (Homebrew)",
     "target": "aarch64-apple-darwin"
   },
-  "cli_sha256": "6c4e2bfe01f75c60cc3bc33145263e11a5272ba73700eb91c5914e01b2faeb5e",
+  "cli_sha256": "97ab302e948bfe0634c55398b2a09d7cc0bb5b04a1d6c3f4cf058e4dfa3cb3a9",
   "reference_execution": "Retained reference trajectories and fit estimates; native executions are fresh. Reference versions identify the retained records, not newly run reference processes.",
   "simulation_results": {
     "omex_models": 8,
