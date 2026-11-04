@@ -63,5 +63,7 @@ The COMBINE/OMEX archives are test fixtures. Native fitting and JSON model profi
 are identified explicitly. To find and use models, visit the companion
 [model library](https://github.com/unibio-intelligence/qspquest-models).
 
-Validation contributions are GPL-3.0-only; component notices remain applicable.
+Contributions are welcome: open an issue first, then follow the
+[contributing guide](CONTRIBUTING.md). Validation contributions are
+GPL-3.0-only; component notices remain applicable.
 See [third-party notices](THIRD_PARTY_NOTICES.md).

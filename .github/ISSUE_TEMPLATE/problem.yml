@@ -1,0 +1,24 @@
+name: Problem with a comparison
+description: A replay that fails, or a result that looks wrong.
+body:
+  - type: input
+    id: case
+    attributes:
+      label: Suite, model and case
+      placeholder: presets, qspquest-ortiz-2024-ravulizumab-nmosd-pkpd, week50-40-60-pk-free-c5-ode
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Command and output
+      description: The exact command and what it printed.
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: QSPQuest version and platform
+      placeholder: qspquest 0.1.0, macOS 15 arm64
+    validations:
+      required: true

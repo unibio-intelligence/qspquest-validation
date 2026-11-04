@@ -1,0 +1,23 @@
+name: Propose a comparison
+description: Suggest a reference engine, dataset or test case.
+body:
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What to compare
+      description: The reference engine or dataset, its version, and the models or cases it covers.
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: License
+      description: License of the reference engine, data or code.
+    validations:
+      required: true
+  - type: checkboxes
+    id: contribute
+    attributes:
+      label: Contribution
+      options:
+        - label: I would like to prepare this comparison myself after we agree on the approach.
