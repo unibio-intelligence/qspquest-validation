@@ -1,9 +1,10 @@
 # QSPQuest validation
 
 Numerical comparisons for [QSPQuest](https://github.com/unibio-intelligence/qspquest):
-what was tested, what matched, and where the results apply. These results describe
-the engine build identified in [environment.json](environment.json); they do not
-qualify later releases. A match means agreement within stated tolerances.
+what was tested, what matched, and where the results apply. These results apply to
+QSPQuest builds with the numerical identity in [environment.json](environment.json):
+the same solver sources and locked dependencies. A release that changes those is
+re-recorded. A match means agreement within stated tolerances.
 QSPQuest now uses upstream Diffsol, which has no Rodas5P; native results that
 used Rodas5P in earlier builds are now recorded with BDF.
 
@@ -67,3 +68,8 @@ Contributions are welcome: open an issue first, then follow the
 [contributing guide](CONTRIBUTING.md). Validation contributions are
 GPL-3.0-only; component notices remain applicable.
 See [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## Acknowledgements
+
+We gratefully acknowledge support from Anthropic's AI for Science rare disease
+research grants.
