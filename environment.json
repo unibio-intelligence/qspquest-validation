@@ -2,12 +2,12 @@
   "engine": {
     "backend": "diffsol",
     "backend_version": "0.18.0+git:883d9a09238c2e0b465f0f1549c462b8c38ea1b2",
-    "compiler_source_sha256": "sha256:e0ef7fdef651ba1da89f735055423be8c9bfd4d547df4567bb48e3b298cc13b7",
+    "compiler_source_sha256": "sha256:ce189ad2bb3d9ca31d4b911c05a39d2f6410b0c7f67d3b91bdcb270c10652459",
     "compiler_version": "qspquest/0.1.0",
     "rustc_version": "rustc 1.98.1 (48a229cea 2026-09-01) (Homebrew)",
     "target": "aarch64-apple-darwin"
   },
-  "cli_sha256": "8508d398665c2103d1bf26c76b722b033a81eaeecf7eb25e47b7fa43ec9af7e8",
+  "cli_sha256": "978ce0463e00c80d2403b562666f2cd374e179597444e0b993d7f10b9de8562f",
   "independent_engines": {
     "Julia": "1.12.6",
     "Julia_packages": {
@@ -57,5 +57,5 @@
     "prediction_atol": 1e-06
   },
   "reference_execution": "Retained reference trajectories and fit estimates; native executions are fresh. Reference versions identify the retained records, not newly run reference processes.",
-  "numerical_source_sha256": "sha256:9086fe3d2752414a259cf9c9cccbd24c7fed518a17ffba90500e42106246af51"
+  "numerical_source_sha256": "sha256:f058ff8047452f241607ca5f2b091b97609f052bf4a95e1e0bb3c9380d14a833"
 }
