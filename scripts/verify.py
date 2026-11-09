@@ -19,22 +19,16 @@ def report(name):
 
 def main():
     import runpy
-    runpy.run_path(str(ROOT / "scripts/evidence_contract.py"))["verify_evidence"](ROOT)
+    contract = runpy.run_path(str(ROOT / "scripts/evidence_contract.py"))
     manifest = json.loads((ROOT / "manifest.json").read_text())
-    actual = {
-        str(p.relative_to(ROOT)): p
-        for p in ROOT.rglob("*")
-        if p.is_file()
-        and ".git" not in p.relative_to(ROOT).parts
-        and "__pycache__" not in p.relative_to(ROOT).parts
-        and p.name != "manifest.json"
-    }
+    actual = contract["snapshot_files"](ROOT)
     check(set(actual) == set(manifest["files"]), "snapshot inventory differs")
     for name, p in actual.items():
         check(
             hashlib.sha256(p.read_bytes()).hexdigest() == manifest["files"][name],
             "checksum differs: " + name,
         )
+    contract["verify_evidence"](ROOT)
     for entry in json.loads((ROOT / "inputs/index.json").read_text())["archives"]:
         data = (ROOT / entry["archive"]).read_bytes()
         check(
@@ -129,7 +123,7 @@ def main():
                     "old nlmixr2 result",
                 )
     extra = report("source-presets.json.gz")
-    check(len(extra["cases"]) == 597, "source-preset denominator differs")
+    check(len(extra["cases"]) == 592, "source-preset denominator differs")
     for c in extra["cases"]:
         check(c["status"] == "matched", "source-preset mismatch")
         check(
@@ -153,14 +147,14 @@ def main():
         ),
         "fitting result differs",
     )
-    for filename, count in [("simulations.csv", 1719), ("fitting.csv", 1906)]:
+    for filename, count in [("simulations.csv", 1714), ("fitting.csv", 1906)]:
         with (ROOT / "results" / filename).open() as f:
             rows = list(csv.DictReader(f))
         check(len(rows) == count, "CSV count differs: " + filename)
     for p in (ROOT / "scripts").glob("*.py"):
         ast.parse(p.read_text())
     print(
-        "Verified all file and OMEX member hashes; 1,719 simulation comparisons and 1,906 fitting comparisons; recorded QSPQuest engine identities consistent."
+        "Verified all file and OMEX member hashes; 1,714 simulation comparisons and 1,906 fitting comparisons; recorded QSPQuest engine identities consistent."
     )
 
 

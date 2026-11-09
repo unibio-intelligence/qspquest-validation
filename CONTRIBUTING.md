@@ -11,8 +11,9 @@ new reference engines or cases, and documentation fixes.
    license. Except for typo fixes, wait for a maintainer to agree on the
    approach before you open a pull request.
 2. **Open a focused pull request.** Make one change per pull request, link its
-   issue (`Closes #123`) and run `python3 -B scripts/verify.py` and
-   `python3 -B -m unittest discover -s scripts -p 'test_*.py'` first. Never
+   issue (`Closes #123`) and run
+   `python3 -B -m unittest discover -s scripts -p 'test_*.py'` first. The suite
+   includes archive verification and comparison-failure checks. Never
    loosen a tolerance to make a comparison pass; a new failure is a result to
    report.
 3. **Review and release.** Maintainers re-run the affected comparisons and

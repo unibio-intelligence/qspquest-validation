@@ -6,7 +6,9 @@ import json
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 from compare_nlmixr_omex_fits import compare as compare_fits
+from reproduce import fit
 from trajectory_comparison import compare_columns, read_reference
 
 
@@ -149,7 +151,8 @@ class FittingContractTests(unittest.TestCase):
         reference={"status":"executed","parameters":{"cl":2.},"nll":3.,
                    "predictions":[{"TIME":0.,"IPRED":5.},{"TIME":1.,"IPRED":4.}]}
         (folder/"nlmixr2-result.json").write_text(json.dumps(reference))
-        run={"regimen":{"observations":[{"time":{"value":t,"unit":"h"},"side":s}
+        run={"schema":"qspquest.run/v0.1","parameters":{},"regimen":{
+            "observations":[{"time":{"value":t,"unit":"h"},"side":s}
              for t,s in [(0.,"post"),(1.,"pre")]]}}
         for solver in ("diffsol_bdf",):
             (folder/(solver+"-request.json")).write_text(json.dumps({"problem":{"request":{
@@ -160,6 +163,19 @@ class FittingContractTests(unittest.TestCase):
             (folder/(solver+"-prediction.json")).write_text(json.dumps({"times":[0.,1.],"sides":["post","pre"],
                 "time_unit":"h","outputs":[{"name":"cp","unit":"1","values":[5.,4.]}]}))
         return folder
+
+    def test_fitting_replay_accepts_one_bdf_result_per_case(self):
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            root = workspace / "fitting-examples-20261005"
+            folder = self.make_case(root)
+            cli = workspace / "qspquest"
+            cli.write_bytes(b"synthetic executable identity")
+            result = json.loads((folder / "diffsol_bdf-result.json").read_text())
+            with (patch("reproduce.run_native", return_value=result),
+                  patch("reproduce.subprocess.run"), contextlib.redirect_stdout(io.StringIO())):
+                report = fit(workspace, cli, "sample", "1", "Rscript")
+            self.assertEqual(report["counts"], {"matched_converged": 1})
 
     def test_positive_and_shifted_missing_nonfinite_time_grids(self):
         with tempfile.TemporaryDirectory() as directory:

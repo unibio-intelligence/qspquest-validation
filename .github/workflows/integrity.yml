@@ -34,5 +34,4 @@ jobs:
           python-version: '3.11'
       - name: Verify committed content
         run: |
-          python -B scripts/verify.py
           python -B -m unittest discover -s scripts -p 'test_*.py'

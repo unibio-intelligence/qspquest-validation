@@ -8,6 +8,18 @@ REPORTS = ('omex-rxode2', 'mrgsolve', 'ordinarydiffeq', 'roadrunner', 'copasi',
            'nlmixr2-conditions-patched-rxode2-bdf', 'individual-fitting')
 
 
+def snapshot_files(root):
+    """Inventory the snapshot, excluding its root manifest and local metadata."""
+    return {
+        path.relative_to(root).as_posix(): path
+        for path in root.rglob("*")
+        if path.is_file()
+        and path != root / "manifest.json"
+        and ".git" not in path.relative_to(root).parts
+        and "__pycache__" not in path.relative_to(root).parts
+    }
+
+
 def max_error(comparison):
     if 'max_scaled_error' in comparison:
         return comparison['max_scaled_error']

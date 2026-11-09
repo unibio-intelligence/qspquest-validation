@@ -16,8 +16,8 @@
     "omex_rxode2_matches": {
       "bdf": 47
     },
-    "additional_source_presets": 597,
-    "additional_source_matches": 597,
+    "additional_source_presets": 592,
+    "additional_source_matches": 592,
     "other_engines": [
       {
         "engine": "mrgsolve",

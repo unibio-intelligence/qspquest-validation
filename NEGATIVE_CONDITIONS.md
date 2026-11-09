@@ -23,7 +23,7 @@ safeLog and safePow guards were enabled and are recorded for each run.
 | tgi_no_sat_powerLaw | retained_nlmixr-v032-numeric-pilot-v5 | solver | finite guarded outputs |
 | tgi_sat_genVonBertalanffy | retained_nlmixr-v032-numeric-pilot-v5 | solver | contains nonfinite/missing outputs |
 
-Where the solution blows up in finite time, R may return an enormous but finite
+Where the solution blows up in finite time, R may return a very large but finite
 guarded value; see `UPSTREAM_ISSUES.md`. Domain rejections are neither numerical
 mismatches nor passing simulations. Parameters and dose events were not changed.
 

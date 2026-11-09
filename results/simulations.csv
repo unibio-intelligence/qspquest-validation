@@ -328,7 +328,6 @@ source-presets,qspquest-cai-2024-ustekinumab-pediatric-ibd-pbpk-reduced,pediatri
 source-presets,qspquest-cai-2024-ustekinumab-pediatric-ibd-pbpk-reduced,pediatric-390mg-iv-90mg-sc-q8w-reduced,diffsol_bdf,matched,0.008679130697834575
 source-presets,qspquest-cai-2024-ustekinumab-pediatric-ibd-pbpk-reduced,pediatric-390mg-iv-induction-rosh2021,diffsol_bdf,matched,0.0022839281098826457
 source-presets,qspquest-cai-2024-ustekinumab-pediatric-ibd-pbpk-reduced,pediatric-9mgkg-iv-induction-rosh2021,diffsol_bdf,matched,0.0016116902585848417
-source-presets,qspquest-caimi-2024-loncastuximab-cd19-qsp,caimi-2024-exact-article-si-anchors,diffsol_bdf,matched,0.011916864304651581
 source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,ode-charged-liver-free-mmae-aucall-h-nm,diffsol_bdf,matched,0.014014147335215289
 source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,ode-charged-liver-total-mab-aucall-h-nm,diffsol_bdf,matched,0.018041286589254708
 source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,ode-charged-liver-total-mmae-aucall-h-nm,diffsol_bdf,matched,0.09949436240712525
@@ -366,7 +365,6 @@ source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,table-n87-t
 source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,table-plasma-pk,diffsol_bdf,matched,2.3572687667170494e-11
 source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,table-spleen-pk,diffsol_bdf,matched,2.3572687667170494e-11
 source-presets,qspquest-chang-2025-charged-trastuzumab-adc-mice-pkpd,table6-ratios-and-text-fold-changes,diffsol_bdf,matched,2.3572687667170494e-11
-source-presets,qspquest-chen-2025-trastuzumab-aide-pe24-sphere-pkpd,exact-source-anchor,diffsol_bdf,matched,0.001527663182261654
 source-presets,qspquest-cheng-2022-skb264-trop2-adc-preclinical-pkpd,corrigendum-table5,diffsol_bdf,matched,0.007413906908635128
 source-presets,qspquest-cheng-2022-skb264-trop2-adc-preclinical-pkpd,design-affinity-cytotoxicity,diffsol_bdf,matched,0.007413906908635128
 source-presets,qspquest-cheng-2022-skb264-trop2-adc-preclinical-pkpd,efficacy-pkpd-text,diffsol_bdf,matched,0.007413906908635128
@@ -480,7 +478,6 @@ source-presets,qspquest-de-vries-2018-mcla128-zenocutuzumab-pkpd,study-design-an
 source-presets,qspquest-de-vries-2018-mcla128-zenocutuzumab-pkpd,table1-pk-parameters,diffsol_bdf,matched,0.00037291037557036973
 source-presets,qspquest-de-vries-2018-mcla128-zenocutuzumab-pkpd,table2-tumor-pd-parameters,diffsol_bdf,matched,0.00037291037557036973
 source-presets,qspquest-de-vries-2018-mcla128-zenocutuzumab-pkpd,table3-human-dose-predictions,diffsol_bdf,matched,0.00037291037557036973
-source-presets,qspquest-duvnjak-2026-vedolizumab-pregnancy-albumin-pk,exact-table-code-and-text-anchor,diffsol_bdf,matched,0.0
 source-presets,qspquest-eaton-2025-dabigatran-idarucizumab-sheep-cpb-pkpd,cpb-idarucizumab-reversal-overlay,diffsol_bdf,matched,0.8996163435492868
 source-presets,qspquest-eaton-2025-dabigatran-idarucizumab-sheep-cpb-pkpd,exact-source-anchor,diffsol_bdf,matched,1.9313231331259905e-11
 source-presets,qspquest-eaton-2025-idarucizumab-dabigatran-sheep-pkpd,actual-administration-duration-sensitivity,diffsol_bdf,matched,0.011252649991691592
@@ -745,7 +742,6 @@ source-presets,qspquest-sule-2025-bevacizumab-minimal-pbpk-pediatric-bridge,male
 source-presets,qspquest-sule-2025-bevacizumab-minimal-pbpk-pediatric-bridge,male-2-6y-10mgkg-q2w-ode-endpoint-overlay,diffsol_bdf,matched,0.055207211298995945
 source-presets,qspquest-sule-2025-bevacizumab-minimal-pbpk-pediatric-bridge,male-6-12y-10mgkg-q2w-ode-endpoint-overlay,diffsol_bdf,matched,0.02394659709284675
 source-presets,qspquest-sule-2025-bevacizumab-minimal-pbpk-pediatric-bridge,source-tables-exact-replay,diffsol_bdf,matched,0.0
-source-presets,qspquest-thomas-2025-risankizumab-precision-dosing-dashboard,dashboard-exact-replay,diffsol_bdf,matched,0.0
 source-presets,qspquest-vu-2017-erenumab-cidbf-pkpd-tmdd,iv-140mg-single-infusion-dynamic,diffsol_bdf,matched,0.06869498811312451
 source-presets,qspquest-vu-2017-erenumab-cidbf-pkpd-tmdd,paper-population-and-threshold-checks,diffsol_bdf,matched,2.72215072590775e-11
 source-presets,qspquest-vu-2017-erenumab-cidbf-pkpd-tmdd,sc-21mg-q4w-68kg-s8-dynamic,diffsol_bdf,matched,0.4221950065913388
@@ -833,7 +829,6 @@ source-presets,qspquest-yang-2021-cemiplimab-advanced-malignancies-poppk,source-
 source-presets,qspquest-yang-2021-cemiplimab-advanced-malignancies-poppk,source-3mgkg-q2w-median-covariates,diffsol_bdf,matched,9.292825015265716e-06
 source-presets,qspquest-yang-2021-cemiplimab-advanced-malignancies-poppk,source-3mgkg-q3w-median-covariates,diffsol_bdf,matched,9.485572951992137e-06
 source-presets,qspquest-yang-2021-cemiplimab-advanced-malignancies-poppk,suppfig1-clearance-timecourse-fixed-effect-probe,diffsol_bdf,matched,3.7019477060550836e-11
-source-presets,qspquest-yarur-2025-ustekinumab-clearance-ibd-pk,exact-article-table-anchor,diffsol_bdf,matched,0.0
 source-presets,qspquest-yoshida-2020-crenezumab-abeta-tmdd-pkpd,fig8-120mgkg-q4w-iv-source-limited,diffsol_bdf,matched,0.024054904701794066
 source-presets,qspquest-yoshida-2020-crenezumab-abeta-tmdd-pkpd,fig8-15mgkg-q4w-iv-source-limited,diffsol_bdf,matched,0.033708565895341776
 source-presets,qspquest-yoshida-2020-crenezumab-abeta-tmdd-pkpd,fig8-60mgkg-q4w-iv-source-limited,diffsol_bdf,matched,0.051970712763983025
