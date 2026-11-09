@@ -206,7 +206,7 @@ def fit(workspace, cli, dataset_filter, subject_filter, rscript):
     from compare_nlmixr_omex_fits import compare
 
     report = compare(root, cli_sha256=hashlib.sha256(cli.read_bytes()).hexdigest())
-    if report["counts"] != {"matched_converged": 2 * len(plan["cases"])}:
+    if report["counts"] != {"matched_converged": len(plan["cases"])}:
         raise RuntimeError("fitting comparison did not pass")
     return report
 

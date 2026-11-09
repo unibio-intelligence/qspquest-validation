@@ -23,7 +23,7 @@ depot doses in time order and finite amounts, and rejects ambiguous simultaneous
 doses and resets. QSPQuest's equations, parameters and dosing are unchanged. The
 original discrepancy and the workaround match are reported as separate rows.
 The patch removes two event-handler assignments that overwrite the administered
-amount with the internal infusion rate. Fresh runs of patched rxode2 and the current QSPQuest engine match on all 404 valid requests with BDF. Nine analytic
+amount with the internal infusion rate. New runs of patched rxode2 and the current QSPQuest engine match on all 404 valid requests with BDF. Nine analytic
 history tests cover bolus, duration/rate infusions, bioavailability, unequal
 repeat/overlapping doses, compartments, subjects and no-dose zero-history policy.
 See `upstream-patches/rxode2/README.md` for the patch and reproduction commands.
@@ -36,7 +36,8 @@ The `r0/rmax/crmax` input-inhibition template defines
 uses `Imax=(Rmax-R0)/Rmax` and computes
 `R0-(1-Imax)*Rmax`, also identically zero. Parameter substitution cannot make
 these identities positive. The formulas overwrite separately declared `imax`.
-The precursor template inherits the resulting zero IC50.
+The precursor template inherits the resulting zero half-maximal inhibitory
+concentration (IC50).
 
 With zero exposure, the inhibition fraction becomes an undefined 0/0. QSPQuest
 rejects it; rxode2's safe division can return a finite value instead, which is not
@@ -45,7 +46,8 @@ an upstream report with the algebra, original sources and examples.
 
 The precursor templates also refer to `kin` while defining `kin` without an
 independent declaration and omit drug-free stationary initial conditions. The
-stimulation defaults yield a negative EC50 and dose-dependent poles. Both
+stimulation defaults yield a negative half-maximal effective concentration
+(EC50) and dose-dependent poles. Both
 engines fail at the two attempted pole-crossing conditions. Do not substitute
 an arbitrary positive EC50 and call the result the same source model.
 
@@ -56,7 +58,7 @@ an arbitrary positive EC50 and call the result the same source model.
   concentration readout is a separate, well-defined observation contract.
 - Two tumor-growth templates have finite-time blow-up before the requested
   endpoint of 24. Continuing beyond the pole has no finite mathematical solution.
-  One R run returns missing values; another returns an enormous finite number.
+  One R run returns missing values; another returns a very large finite number.
   A finite CSV entry is not sufficient evidence of a valid continued solution.
 - `Cirincione_2017_exenatide` without an administration: `podo()`/`tad()` history
   is absent. The original R CSV contains missing values after the initial row,

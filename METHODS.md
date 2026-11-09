@@ -8,13 +8,15 @@ domain limits.
 
 ### States, outputs and solver coverage
 
-For the eight OMEX models, the reference adapters read the SBML equations and
-SED-ML sampling times directly. Every state and output must satisfy
+For the eight OMEX (Open Modeling EXchange) models, the reference adapters read
+the Systems Biology Markup Language (SBML) equations and Simulation Experiment
+Description Markup Language (SED-ML) sampling times directly. Every state and output must satisfy
 `abs(native - reference) <= 1e-8 + 1e-4*abs(reference)` at the same observation
 times, with no interpolation. Simultaneous scheduled assignments are split into
 segments so that both the initial post-event sample and later pre-event samples
 are compared. `omex-simulations.omex` contains the eight original model archives
-and their 94 native requests. QSPQuest runs the 47 BDF requests with their stored
+and their 94 native requests. QSPQuest runs the 47 backward differentiation
+formula (BDF) requests with their stored
 tolerances and callback budgets. The 47 Rodas5P requests are kept from earlier
 engine builds and are not run: the current engine uses upstream Diffsol, which
 has no Rodas5P.
@@ -23,13 +25,17 @@ Normalizing the SBML time symbol changes notation only. AMICI uses Adams with
 fixed-point iteration for the Yuan cases whose fractional power has a singular
 analytic Jacobian at zero, and BDF/Newton for the other cases.
 
-The 597 additional fixed presets use the same tolerance and exact time grids.
+The 592 additional fixed presets use the same tolerance and exact time grids.
 `source-presets.omex` holds each preset's native JSON model and request and one
 independent reference CSV. QSPQuest is rerun against these stored references; the
 original tools that produced them are not rerun. Their hashes are in
 `results/source-presets.json.gz`, and source scope and attribution are in
-`inputs/model-sources.json`. Presets that were left out or held back are not
-counted in the 597. This tests simulation only, not fitting or full-paper
+`inputs/model-sources.json`. The models of 176 presets also declare
+constant bookkeeping outputs from the October 2026 recording, such as
+`validation_run_nonce` and source-acquisition flags. They are compared like any
+other output but carry no scientific meaning; current model library versions do
+not include them. Presets that were left out or held back are not
+counted in the 592. This tests simulation only, not fitting or full-paper
 reproduction.
 
 Most presets run with BDF; 11 use TSIT45. The 28 presets from seven models that
@@ -76,7 +82,8 @@ These cases test the reference patch, not QSPQuest's dosing behavior directly.
 ## Parameter estimation accuracy
 
 `individual-fitting.omex` contains every final qsp definition, observation row,
-dose event, parameter role, physical bound, known error SD, reference equation,
+dose event, parameter role, physical bound, known error standard deviation (SD),
+reference equation,
 and native fitting request; only the BDF requests are run. It uses a COMBINE container with a native fitting
 format, not a SED-ML estimation task. Data source hashes and the original GPL
 contributor records are included.
@@ -86,20 +93,23 @@ The objectives are fully normalized individual Gaussian likelihoods with no
 estimated random effects. Known additive SD is 20% of maximum subject response.
 The twelve ACOP examples estimate clearance or Vmax; theophylline estimates
 clearance, volume and absorption rate; phenobarbital estimates clearance and
-volume. Other contracts estimate the declared single response, weight, PK,
-myelosuppression, PBPK, or binding parameter. Warfarin is PK-only. Neonatal
+volume. Other contracts estimate the declared single response, weight,
+pharmacokinetic (PK), myelosuppression, physiologically based pharmacokinetic
+(PBPK), or binding parameter. Warfarin is PK-only. Neonatal
 weights are simulated. These narrow contracts do not reproduce the source
 population analyses or cover fitting for all 59 nlmixr2lib models.
 
 A match requires all three:
 
 - Every parameter difference <= `1e-6 + 0.001*abs(reference)`.
-- Absolute normalized Gaussian negative-log-likelihood difference <= `1e-4`.
+- Absolute normalized Gaussian negative log-likelihood (NLL) difference <= `1e-4`.
 - Every fitted prediction difference <= `1e-6 + 0.001*abs(reference)`.
 
 The native fit must also converge. The R reference runs nlmixr2est estimation
-via FOCEI; scalar cases without random effects use scalar optimization. OFV values from
-different methods are not compared with normalized NLL. WBC, PBPK and binding
+via first-order conditional estimation with interaction (FOCEI); scalar cases
+without random effects use scalar optimization. Objective function values (OFV)
+from different methods are not compared with normalized NLL. White blood cell
+(WBC), PBPK and binding
 references use a positive log-multiplier within the same physical bounds. The
 stored final WBC requests use the best converged fit among runs from the source
 start, seven log-spaced starts and a physical midpoint; the reference estimate is
@@ -122,7 +132,7 @@ tested with the original requests and parameters unchanged. BDF
 rejected the same 16 conditions in both the original and corrected comparisons. `NEGATIVE_CONDITIONS.md` lists the native domain/solver diagnostics and
 actual R outcomes; `UPSTREAM_ISSUES.md` provides the algebra and history analysis.
 
-Reference results are judged on mathematical validity, not just a successful
+Reference results are judged on mathematical validity, not only on a successful
 exit. Finite values produced by the safeZero, safeLog and safePow guards are not
 counted as solutions of an undefined expression. Non-finite or missing outputs and
 solver failures are recorded. Rejected requests are not counted as successful
@@ -136,7 +146,7 @@ backend hashes, and the reference tool versions. Replays record the hash of the
 binary actually used; a binary for another platform has a different hash even when
 built from the same source. The results apply to the recorded engine build.
 
-Python needs NumPy, pandas, and python-libsbml. R references use rxode2 5.1.8,
+The Python tools require NumPy, pandas, and python-libsbml. R references use rxode2 5.1.8,
 nlmixr2lib 0.3.2, nlmixr2est 7.1.0, jsonlite, digest, and nlme. Configure
 `R_LIBS_USER` if these are in a separate library. Additional engines need their
 recorded environments: mrgsolve in R, OrdinaryDiffEq in Julia, or the appropriate
@@ -161,7 +171,7 @@ For a complete dependency-free setup and one selected comparison, start with
 [First replay](docs/first-replay.md). The commands below run optional reference
 engines or additional recorded tests.
 Install the dependencies listed under reference methods and environments, then
-set `QSPQUEST_EXECUTABLE` to the QSPQuest CLI.
+set `QSPQUEST_EXECUTABLE` to the QSPQuest command-line interface (CLI).
 
 ```sh
 python scripts/verify.py
@@ -179,8 +189,8 @@ python scripts/reproduce.py --suite mrgsolve \
   --cli "$QSPQUEST_EXECUTABLE" --output replay-mrgsolve
 ```
 
-The runner reruns BDF, then generates the reference and compares
-them. Omit `--model` for all eight models. Additional source presets
+The runner reruns the native BDF simulation, then generates the reference and
+compares the two. Omit `--model` for all eight models. Additional source presets
 use `--suite presets`; this compares new native trajectories against the retained
 source references without regenerating the original source validators.
 

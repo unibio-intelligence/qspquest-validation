@@ -1,6 +1,7 @@
 # rxode2 administered-amount history patch
 
-A UniBio Intelligence fix for administered-amount history in rxode2 5.1.8,
+This directory contains a UniBio Intelligence fix for administered-amount history
+in rxode2 5.1.8,
 source commit `2f421fb1341a2b8954a7f86cf6aceb3938a28bef`.
 
 `handleTlastInline` reconstructs the raw administered amount for a fixed

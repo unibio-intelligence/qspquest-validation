@@ -7,7 +7,7 @@ import tempfile
 import subprocess
 import sys
 import unittest
-from evidence_contract import REPORTS, verify_evidence
+from evidence_contract import REPORTS, snapshot_files, verify_evidence
 
 class EvidenceContractTests(unittest.TestCase):
     def setUp(self):
@@ -22,6 +22,14 @@ class EvidenceContractTests(unittest.TestCase):
         source = Path(__file__).resolve().parents[1]
         subprocess.run([sys.executable, "-I", str(source / "scripts/verify.py")],
                        capture_output=True, check=True)
+
+    def test_only_the_root_manifest_is_excluded_from_inventory(self):
+        (self.root / "manifest.json").write_text("{}")
+        nested = self.root / "results/manifest.json"
+        nested.write_text("{}")
+        files = snapshot_files(self.root)
+        self.assertNotIn("manifest.json", files)
+        self.assertEqual(files["results/manifest.json"], nested)
 
     def test_consistent_snapshot(self):
         verify_evidence(self.root)
